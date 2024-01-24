@@ -15,6 +15,7 @@ def Greet():
 def get_all_books():
     return jsonify({"books":books})
 
+
 @app.route("/books/<int:book_id>",methods=["GET"])
 def get_book(book_id):
     book =  next(( b for b in books if b["id"]==book_id ),None)
