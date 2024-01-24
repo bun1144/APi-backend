@@ -25,11 +25,12 @@ for std in all_students:
     
 @app.route("/")
 def Greet():
-    return "<p>Welcome to Book Management Systems</p>"
+    return "<p>Welcome to Student Management API</p>"
 
-@app.route("/books",methods=["GET"])
-def get_all_books():
-    return jsonify({"books":books})
+@app.route("/students",methods=["GET"])
+@basic_auth.required
+def get_all_stds():
+    return jsonify({"students":stds})
 
 
 @app.route("/books/<int:book_id>",methods=["GET"])
