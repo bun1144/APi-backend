@@ -1,28 +1,28 @@
 from flask import request,Flask,jsonify
 from pymongo.mongo_client import MongoClient
 from flask_basicauth import BasicAuth
+
 app = Flask(__name__) 
-uri = "mongodb+srv://<bun1144>:<kitti>@cluster0.bxs0qg3.mongodb.net/"
+uri = "mongodb+srv://mongo:mongo@cluster0.cgejftk.mongodb.net/?retryWrites=true&w=majority"
+
+app.config['BASIC_AUTH_USERNAME']='username'
+app.config['BASIC_AUTH_PASSWORD']='password'
+basic_auth = BasicAuth(app)
 
 client = MongoClient(uri)
 db = client["students"]
 collection = db["std_info"]
 
-
-app.config['BASIC_AUTH_USERNAME']='username'
-app.config['BASIC_AUTH_PASSWORD']='password'
-basic_auth = BasicAuth(app)
 books=[
     {"id":1,"title":"Book 1","author":"Author 1"},
     {"id":2,"title":"Book 2","author":"Author 2"},
     {"id":3,"title":"Book 3","author":"Author 3"}
 ]
-
 stds=[]
 all_students = collection.find()
 for std in all_students:
     stds.append(std)
-    
+
 @app.route("/")
 def Greet():
     return "<p>Welcome to Student Management API</p>"
@@ -31,7 +31,7 @@ def Greet():
 @basic_auth.required
 def get_all_stds():
     return jsonify({"students":stds})
-
+         
 
 @app.route("/students/<int:std_id>",methods=["GET"])
 @basic_auth.required
@@ -47,7 +47,7 @@ def get_std(std_id):
         return jsonify(student)
     else:
         return jsonify({"error":"Student not found"}),404
-    
+
 @app.route("/students",methods=["POST"])
 @basic_auth.required
 def create_std():
