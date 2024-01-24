@@ -92,14 +92,16 @@ def update_std(std_id):
 
 
 
-@app.route("/books/<int:book_id>",methods=["DELETE"])
-def delete_book(book_id):
-    book = next((b for b in books if b["id"]==book_id),None)
-    if book:
-        books.remove(book)
-        return jsonify({"message":"Book deleted successfully"}),200
+@app.route("/students/<int:std_id>",methods=["DELETE"])
+def delete_std(std_id):
+    std_id = str(std_id)
+    student = next((s for s in stds if s["_id"]==std_id),None)
+    if student:
+        stds.remove(student)
+        collection.delete_one({"_id":std_id})
+        return jsonify({"message":"Student deleted successfully"}),200
     else:
-        return jsonify({"error":"Book not found"}),404
+        return jsonify({"error":"Student not found"}),404
     
 
 
