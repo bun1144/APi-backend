@@ -1,12 +1,28 @@
 from flask import request,Flask,jsonify
-
+from pymongo.mongo_client import MongoClient
+from flask_basicauth import BasicAuth
 app = Flask(__name__) 
+uri = "mongodb+srv://<bun1144>:<kitti>@cluster0.bxs0qg3.mongodb.net/"
 
+client = MongoClient(uri)
+db = client["students"]
+collection = db["std_info"]
+
+
+app.config['BASIC_AUTH_USERNAME']='username'
+app.config['BASIC_AUTH_PASSWORD']='password'
+basic_auth = BasicAuth(app)
 books=[
     {"id":1,"title":"Book 1","author":"Author 1"},
     {"id":2,"title":"Book 2","author":"Author 2"},
     {"id":3,"title":"Book 3","author":"Author 3"}
 ]
+
+stds=[]
+all_students = collection.find()
+for std in all_students:
+    stds.append(std)
+    
 @app.route("/")
 def Greet():
     return "<p>Welcome to Book Management Systems</p>"
