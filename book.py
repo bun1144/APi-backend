@@ -33,14 +33,21 @@ def get_all_stds():
     return jsonify({"students":stds})
 
 
-@app.route("/books/<int:book_id>",methods=["GET"])
-def get_book(book_id):
-    book =  next(( b for b in books if b["id"]==book_id ),None)
-    if book:
-        return jsonify(book)
+@app.route("/students/<int:std_id>",methods=["GET"])
+@basic_auth.required
+def get_std(std_id):
+    for s in stds:
+        std_id = str(std_id)
+        if  s["_id"] == std_id:
+            student = s
+            break
+        else:
+            student = None
+    if student:
+        return jsonify(student)
     else:
-        return jsonify({"error":"Book not found"}),404
-
+        return jsonify({"error":"Student not found"}),404
+    
 @app.route("/books",methods=["POST"])
 def create_book():
     data = request.get_json()
