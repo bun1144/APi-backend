@@ -3,7 +3,7 @@ from pymongo.mongo_client import MongoClient
 from flask_basicauth import BasicAuth
 
 app = Flask(__name__) 
-uri = "mongodb+srv://mongo:mongo@cluster0.cgejftk.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb+srv://mongo:mongo@cluster0.bxs0qg3.mongodb.net/"
 
 app.config['BASIC_AUTH_USERNAME']='username'
 app.config['BASIC_AUTH_PASSWORD']='password'
