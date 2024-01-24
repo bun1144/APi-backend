@@ -72,15 +72,22 @@ def create_std():
     return jsonify(new_std),200
 
 
-@app.route("/books/<int:book_id>",methods=["PUT"])
-def update_book(book_id):
-    book = next((b for b in books if b["id"]==book_id),None)
-    if book:
+@app.route("/students/<int:std_id>",methods=["PUT"])
+def update_std(std_id):
+    std_id = str(std_id)
+    student = next((s for s in stds if s["_id"]==std_id),None)
+    if student:
         data = request.get_json()
-        book.update(data)
-        return jsonify(book)
+        student.update(data)
+        collection.update_many( {"_id":student["_id"]},
+                                {"$set":{"fullname":student["fullname"],
+                                        "major":student["major"],
+                                        "gpa":student["gpa"]
+                                        }
+                                })
+        return jsonify(student),200
     else:
-        return jsonify({"error":"Book not found"}),404
+        return jsonify({"error":"Student not found"}),404
 
 
 
