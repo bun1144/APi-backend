@@ -48,16 +48,29 @@ def get_std(std_id):
     else:
         return jsonify({"error":"Student not found"}),404
     
-@app.route("/books",methods=["POST"])
-def create_book():
+@app.route("/students",methods=["POST"])
+@basic_auth.required
+def create_std():
     data = request.get_json()
-    new_book={
-        "id":len(books)+1,
-        "title":data["title"],
-        "author":data["author"]
+    new_std={
+        "_id":data["_id"],
+        "fullname":data["fullname"],
+        "major":data["major"],
+        "gpa":data["gpa"]
     }
-    books.append(new_book)
-    return jsonify(new_book),201
+    for s in stds:
+        sd = str(new_std["_id"])
+        if sd == s["_id"]:
+            return jsonify({"error":"Cannot create new student"}),500
+    stds.append(new_std)
+    collection.insert_one({
+        "_id":data["_id"],
+        "fullname":data["fullname"],
+        "major":data["major"],
+        "gpa":data["gpa"]
+    })
+    return jsonify(new_std),200
+
 
 @app.route("/books/<int:book_id>",methods=["PUT"])
 def update_book(book_id):
